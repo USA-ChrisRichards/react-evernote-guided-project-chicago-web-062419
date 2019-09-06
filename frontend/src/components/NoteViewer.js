@@ -1,6 +1,6 @@
-import React, { Fragment } from 'react';
+import React, { Fragment } from "react";
 
-const NoteViewer = (props) => {
+const NoteViewer = props => {
   return (
     <Fragment>
       <h2>Title</h2>
@@ -8,6 +8,6 @@ const NoteViewer = (props) => {
       <button>Edit</button>
     </Fragment>
   );
-}
+};
 
 export default NoteViewer;

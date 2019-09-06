@@ -1,10 +1,10 @@
-import React from 'react';
+import React from "react";
 
-const NoteList = (props) => (
-  <li>
-    <h2>Title</h2>
-    <p>Caption...</p>
+const NoteItem = props => (
+  <li onClick={props.handleNoteClick}>
+    <h2>{props.title}</h2>
+    <p>{props.caption}...</p>
   </li>
 );
 
-export default NoteList;
+export default NoteItem;
