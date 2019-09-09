@@ -14,19 +14,29 @@ class Content extends Component {
   constructor(props) {
     super(props);
   }
+  //PROPS => notes, noteClicked, handleEditClick()
 
   renderContent = () => {
-    if (false) {
-      return <NoteEditor />;
-    } else if (false) {
-      return <NoteViewer notes={this.props.notes} />;
+    if (this.props.editClicked) {
+      return (
+        <NoteEditor
+          handleEditClick={this.props.handleEditClick}
+          note={this.props.noteClicked}
+        />
+      );
+    } else if (this.props.noteClicked) {
+      return (
+        <NoteViewer
+          note={this.props.noteClicked}
+          handleEditClick={this.props.handleEditClick}
+        />
+      );
     } else {
       return <Instructions />;
     }
   };
 
   render() {
-    console.log(this.props.notes);
     return (
       <div className="master-detail-element detail">{this.renderContent()}</div>
     );

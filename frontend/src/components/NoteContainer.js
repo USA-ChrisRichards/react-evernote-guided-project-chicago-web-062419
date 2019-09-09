@@ -8,7 +8,8 @@ class NoteContainer extends Component {
     super();
     this.state = {
       notes: [],
-      selectedNote: {}
+      noteClicked: null,
+      editClicked: false
     };
   }
 
@@ -22,32 +23,41 @@ class NoteContainer extends Component {
       });
   }
 
-  displayNotesInSidebar = () => {};
-
-  // displayNoteInContent = () => {};
-
-  handleNoteClick = () => {
-    console.log("display this note in content/noteViewer");
-    // displayNoteInContent();
+  handleNoteClick = note => {
+    this.setState({ noteClicked: note });
+    console.log("state being changed to:", note);
   };
 
-  handleNewNoteClick = () => {
-    console.log("click... New note form to appear");
+  handleEditClick = note => {
+    // onClick= handleEditClick
+    // show edit form with placeholder text of this.state.noteClicked
+    this.setState({ editClicked: true });
+
+    if (this.state.editClicked === false) {
+      return false;
+    } else {
+      console.log("click");
+      return true;
+    }
+
+    // fetch patch request to edit the note
   };
 
   render() {
-    // console.log(this.state.notes);
     return (
       <Fragment>
         <Search />
         <div className="container">
           <Sidebar
-            notes={this.state.notes}
-            displayNotesInSidebar={this.displayNotesInSidebar}
-            handleNewNoteClick={this.handleNewNoteClick}
+            notes={this.state.notes} // STATE
             handleNoteClick={this.handleNoteClick}
           />
-          <Content notes={this.state.notes} />
+          <Content
+            handleEditClick={this.handleEditClick}
+            editClicked={this.state.editClicked} // STATE
+            notes={this.state.notes} // STATE
+            noteClicked={this.state.noteClicked} // STATE
+          />
         </div>
       </Fragment>
     );
