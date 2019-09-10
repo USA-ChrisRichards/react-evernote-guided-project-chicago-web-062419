@@ -20,8 +20,11 @@ class Content extends Component {
     if (this.props.editClicked) {
       return (
         <NoteEditor
+          updateNote={this.props.updateNote}
+          handleSubmit={this.props.handleSubmit}
           handleEditClick={this.props.handleEditClick}
           note={this.props.noteClicked}
+          handleCancel={this.props.handleCancel}
         />
       );
     } else if (this.props.noteClicked) {
