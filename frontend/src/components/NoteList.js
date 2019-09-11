@@ -3,8 +3,12 @@ import NoteItem from "./NoteItem";
 
 const NoteList = props => {
   const notesList = props.filterNotes.map(note => {
-    let caption = note.body.substring(0, 15);
-    // caption will limit character showing and NoteItem has '...' in <p>
+    let caption = "";
+    if (note.body.length > 15) {
+      caption = note.body.substring(0, 15) + "...";
+    } else {
+      caption = note.body;
+    }
     return (
       <NoteItem
         key={note.id}

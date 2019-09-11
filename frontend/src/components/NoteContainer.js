@@ -14,20 +14,38 @@ class NoteContainer extends Component {
     };
   }
 
-  displayUpdatedNotes = updatedNote => {
-    //map through, if note id matched updatedNote id, return updated note
-    const updatedNotes = this.state.notes.map(note => {
-      if (note.id === updatedNote.id) {
-        return updatedNote;
-      } else {
-        return note;
-      }
-    });
-    this.setState({
-      notes: updatedNotes,
-      noteClicked: updatedNote,
-      editClicked: false
-    });
+  //* READ ******************************************************
+
+  componentDidMount() {
+    this.renderNotes();
+  }
+
+  renderNotes = () => {
+    fetch("http://localhost:3000/api/v1/notes")
+      .then(res => res.json())
+      .then(noteData => {
+        this.setState({
+          notes: noteData
+        });
+      });
+  };
+
+  handleNoteClick = note => {
+    this.setState({ noteClicked: note, editClicked: false });
+  };
+
+  //* UPDATE ******************************************************
+
+  handleEditClick = note => {
+    // show edit form with placeholder text of this.state.noteClicked
+    this.setState({ editClicked: note });
+
+    if (this.state.editClicked === false) {
+      return false;
+    } else {
+      console.log("click");
+      return true;
+    }
   };
 
   updateNote = (changes, id) => {
@@ -45,38 +63,27 @@ class NoteContainer extends Component {
       .catch(error => console.log(error));
   };
 
-  componentDidMount() {
-    this.renderNotes();
-  }
-  renderNotes = () => {
-    fetch("http://localhost:3000/api/v1/notes")
-      .then(res => res.json())
-      .then(noteData => {
-        this.setState({
-          notes: noteData
-        });
-      });
+  displayUpdatedNotes = updatedNote => {
+    //map through, if note id matched updatedNote id, return updated note
+    const updatedNotes = this.state.notes.map(note => {
+      if (note.id === updatedNote.id) {
+        return updatedNote;
+      } else {
+        return note;
+      }
+    });
+    this.setState({
+      notes: updatedNotes,
+      noteClicked: updatedNote,
+      editClicked: false
+    });
   };
 
   handleCancel = () => {
     this.setState({ editClicked: false });
   };
 
-  handleNoteClick = note => {
-    this.setState({ noteClicked: note, editClicked: false });
-  };
-
-  handleEditClick = note => {
-    // show edit form with placeholder text of this.state.noteClicked
-    this.setState({ editClicked: note });
-
-    if (this.state.editClicked === false) {
-      return false;
-    } else {
-      console.log("click");
-      return true;
-    }
-  };
+  //* CREATE ******************************************************
 
   createNewNote = () => {
     let newNote = {
@@ -91,27 +98,47 @@ class NoteContainer extends Component {
         "Content-Type": "application/json"
       },
       body: JSON.stringify(newNote)
-    }).then(() => this.renderNotes());
+    })
+      .then(res => res.json())
+      .then(newNote =>
+        this.setState(prevState => {
+          return { notes: [...prevState.notes, newNote] };
+        })
+      );
   };
 
-  handleDelete = id => {
-    console.log(id);
-    console.log("delete pending further work by me");
-    let deleteConfirmation = window.confirm("Delete this note?");
-    if (deleteConfirmation == true) {
-      // fetch(`http://localhost:3000/api/v1/notes/${id}`, {
-      //   method: "DELETE",
-      //   headers: {
-      //     Accept: "application/json",
-      //     "Content-Type": "application/json"
-      //   },
-      //   body: JSON.stringify(newNote)
-      // }).then(() => this.renderNotes());
-      // alert("note deleted!")
+  //* DELETE ******************************************************
+
+  handleDelete = deletedNote => {
+    let deleteConfirmation = window.confirm(
+      "Are you sure you want to DELETE THIS NOTE?"
+    );
+    if (deleteConfirmation === true) {
+      fetch(`http://localhost:3000/api/v1/notes/${deletedNote.id}`, {
+        method: "DELETE",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(deletedNote)
+      })
+        .then(res => res.json())
+        .then(json => this.filterDeletedNote(deletedNote));
+      alert("note deleted!");
+      console.log(this.state.notes);
     } else {
       alert("Don't worry, your note is safe! 😄");
     }
   };
+
+  filterDeletedNote(deletedNote) {
+    this.setState({
+      notes: this.state.notes.filter(note => note.id !== deletedNote.id)
+    });
+    this.setState({ noteClicked: null });
+  }
+
+  //* FILTER/SEARCH FEATURE ********************************************
 
   handleSearch = input => {
     this.setState({ search: input });
@@ -123,6 +150,8 @@ class NoteContainer extends Component {
     );
     return notes;
   };
+
+  //**********************************************************************
 
   render() {
     return (
@@ -137,7 +166,6 @@ class NoteContainer extends Component {
           />
           <Content
             updateNote={this.updateNote}
-            handleSubmit={this.handleSubmit}
             handleCancel={this.handleCancel}
             handleEditClick={this.handleEditClick}
             handleDelete={this.handleDelete}
