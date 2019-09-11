@@ -32,6 +32,7 @@ class Content extends Component {
         <NoteViewer
           note={this.props.noteClicked}
           handleEditClick={this.props.handleEditClick}
+          handleDelete={this.props.handleDelete}
         />
       );
     } else {

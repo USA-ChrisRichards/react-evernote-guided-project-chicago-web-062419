@@ -2,20 +2,16 @@ import React, { Component } from "react";
 import NoteList from "./NoteList";
 
 class Sidebar extends Component {
-  constructor(props) {
-    super(props);
-  }
-
   render() {
     const notesArr = this.props.notes;
-    // console.log(notesArr);
     return (
       <div className="master-detail-element sidebar">
         <NoteList
           notes={notesArr}
           handleNoteClick={this.props.handleNoteClick}
+          filterNotes={this.props.filterNotes()}
         />
-        <button onClick={this.props.handleNewNote}>New</button>
+        <button onClick={this.props.createNewNote}>New</button>
       </div>
     );
   }

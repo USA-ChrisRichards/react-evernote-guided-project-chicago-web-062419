@@ -2,7 +2,7 @@ import React from "react";
 import NoteItem from "./NoteItem";
 
 const NoteList = props => {
-  const notesList = props.notes.map(note => {
+  const notesList = props.filterNotes.map(note => {
     let caption = note.body.substring(0, 15);
     // caption will limit character showing and NoteItem has '...' in <p>
     return (
