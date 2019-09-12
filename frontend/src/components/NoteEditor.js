@@ -17,7 +17,6 @@ class NoteEditor extends Component {
   handleSubmit = event => {
     event.preventDefault();
     this.props.updateNote(this.state, this.props.note.id);
-    console.log("submit");
   };
 
   // Save button which saves the note via a PATCH request

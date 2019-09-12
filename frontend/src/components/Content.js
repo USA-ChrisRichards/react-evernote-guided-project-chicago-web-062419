@@ -11,9 +11,9 @@ import Instructions from "./Instructions";
           refactor to get this Content component to work.
 */
 class Content extends Component {
-  constructor(props) {
-    super(props);
-  }
+  // constructor(props) {
+  //   super(props);
+  // }
   //PROPS => notes, noteClicked, handleEditClick()
 
   renderContent = () => {

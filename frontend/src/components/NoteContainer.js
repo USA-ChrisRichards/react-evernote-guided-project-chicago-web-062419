@@ -43,13 +43,11 @@ class NoteContainer extends Component {
     if (this.state.editClicked === false) {
       return false;
     } else {
-      console.log("click");
       return true;
     }
   };
 
   updateNote = (changes, id) => {
-    console.log(changes, id);
     fetch(`http://localhost:3000/api/v1/notes/${id}`, {
       headers: {
         Accept: "application/json",
@@ -88,8 +86,8 @@ class NoteContainer extends Component {
   createNewNote = () => {
     let newNote = {
       user_id: 1,
-      title: "Enter note title here",
-      body: "Enter note details here"
+      title: "Enter Note Title Here",
+      body: "Enter note details here..."
     };
     fetch("http://localhost:3000/api/v1/notes", {
       method: "POST",
@@ -111,7 +109,7 @@ class NoteContainer extends Component {
 
   handleDelete = deletedNote => {
     let deleteConfirmation = window.confirm(
-      "Are you sure you want to DELETE THIS NOTE?"
+      `Are you sure you want to DELETE THIS NOTE? - "${deletedNote.title}"`
     );
     if (deleteConfirmation === true) {
       fetch(`http://localhost:3000/api/v1/notes/${deletedNote.id}`, {
@@ -125,7 +123,6 @@ class NoteContainer extends Component {
         .then(res => res.json())
         .then(json => this.filterDeletedNote(deletedNote));
       alert("note deleted!");
-      console.log(this.state.notes);
     } else {
       alert("Don't worry, your note is safe! 😄");
     }
